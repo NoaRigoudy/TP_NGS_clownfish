@@ -52,5 +52,4 @@ mv $i"_2.fastq" $i."fastq"
 
 done
 
-#bla
 
