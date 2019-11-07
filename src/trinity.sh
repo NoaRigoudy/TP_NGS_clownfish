@@ -55,3 +55,13 @@ sed -re "s/(>[_a-zA-Z0-9]*)( len=[0-9]*)( path=.*)/\1/" /home/rstudio/disk/data/
 
 
 
+# Stats sur l'assemblage 
+
+cd home/rstudio/disk/data/trinity_data
+perl /softwares/trinityrnaseq-Trinity-v2.8.5/util/TrinityStats.pl Trinity.fasta > stats_trinity.txt
+
+# Permet de récuperer les stats sur la qualite de l'assemblage effectue par Trinity sous forme .txt
+#on utilise le programme TrinityStats.pl que l'on applique sur notre fichier .fasta
+
+
+
