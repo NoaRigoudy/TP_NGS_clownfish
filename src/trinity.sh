@@ -37,13 +37,13 @@ Trinity --seqType fq \
 
 #trimmomatic=permet de nettoyer rapidement les sequences fastq
 
-#SS_lib_type=type de read soit forward, soit reverse, soit unstranded
+#SS_lib_type=type de librairie pour nos reads : soit forward, soit reverse, soit unstranded
 
 #no_version_check=empecher Trinity d'aller chercher version de Trinity la plus 
 #recente sur internet
 
-#normalize_by_read_set= permet de reduire la quantite de memoire necessaire aux calculs
-#en normalisant les valeurs de coverage, reduisant les extremes comme des reads a tres fort coverage
+#normalize_by_read_set=permet de reduire la quantite de memoire necessaire aux calculs
+#en normalisant les valeurs de coverage, reduisant les extremes = des reads a tres fort coverage
 #ie. transcrits de genes fortement exprimes, qui pourraient prendre bcp de memoire pour rien. 
 
         
