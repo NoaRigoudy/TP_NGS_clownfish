@@ -24,12 +24,13 @@ SRR7591069
 
 for i in $SRR 
 do
-fastq-dump $i -X 4 
+fastq-dump $i
 
 # Ne pas oublier le $ pour pouvoir rentrer dans SRR (i dans boucle)
 # fastq-dump permet de récupérer les fichiers fastq depuis donnees de l'article 
 # -X 4: permet de selectionner 4 spots = coordonnées X,Y d'un read sur la plaque 
 #Illumina dans nos fichiers SRR
+
 
 
 
