@@ -6,7 +6,6 @@ cd $data/transdec_data
 
 
 
-
 # Step 1: extract the long open reading frames
 
 #TransDecoder.LongOrfs -t $data/trinity_data/Trinity.fasta -m 100 --gene_trans_map $data/trinity_data/Trinity.fasta.gene_trans_map -S 
