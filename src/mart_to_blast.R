@@ -1,13 +1,9 @@
-data="/home/rstudio/disk/data"
-cd $data
-mkdir -p blast_data
-cd $data/blast_data
 
-#install.packages("seqinr")
+install.packages("seqinr")
 library(seqinr)
 f=read.fasta("/home/rstudio/disk/data/blast_data/stegastes_clean.fa")
 
-#Remove duplicates from stegastes_clean.fa 
+#Remove duplicates from stegastes_clean.fa (without |) 
 
 sequences <- sapply(f, c2s)
 

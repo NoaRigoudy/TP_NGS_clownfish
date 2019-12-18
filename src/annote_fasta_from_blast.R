@@ -1,3 +1,10 @@
+#Search Saiyan in blast_stegastes
+
+blast_stegastes<-read.table("/home/rstudio/disk/data/blast_data/blast_stegastes", h=F) 
+blast_stegastes[blast_stegastes$V2=="ENSSPAG00000013419si:ch211-256m1.8",]
+#on trouve Saiyan dans le blast: l'id Trinity est TRINITY_DN20767_c0_g1_i1
+
+
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 

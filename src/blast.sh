@@ -27,9 +27,7 @@ makeblastdb -in /home/rstudio/disk/data/blast_data/stegastes_clean2.fa -parse_se
 
 
 #Blast fasta against the ref db
-blastn -db $db -query $query -evalue $evalue -outfmt 6 -out $out_blast
-
-
+blastn -db stegastes -query /home/rstudio/disk/data/trinity_data/Trinity.fasta -evalue 1e-5 -outfmt 6 -out blast_stegastes
 
 
 Rscript --vanilla  annote_fasta_from_blast.R $out_blast 
