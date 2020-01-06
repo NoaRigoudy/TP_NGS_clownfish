@@ -6,7 +6,9 @@ library("ggplot2")
 
 dir<-"/home/rstudio/disk/data/count_data"
 
-### Preparation pour Analyse DESeq
+
+
+### Step 1 : Preparation pour Analyse DESeq
 
 
 ## Table de correspondance entre individu, SRR, type de tissu (orange,blanc)
@@ -60,7 +62,6 @@ dds <- ddsTxi[keep,]
 #de la memoire pour rien car elle ne serait pas possible au vu de leur nombre faible
 
 
-
 ## Assigner des niveaux de facteurs
 
 dds$Tissue <- factor(dds$Tissue, levels = c("O","W"))
@@ -69,9 +70,9 @@ dds$Tissue <- factor(dds$Tissue, levels = c("O","W"))
 
 
 
-### Analyse DESeq
+### Step 2 : Analyse DESeq
 
-##Analysis 
+##Analyse 
 
 dds <- DESeq(dds)
 res <- results(dds)
@@ -99,16 +100,21 @@ sum(resLFC$padj < 0.05, na.rm=TRUE)
 #Somme des genes qui ont une padj<0.05, on en trouve 501
 
 
-## PC Analysis
 
-# Transformation des donnees de comptes pour la PCA
+## Visualtisation des resultats
+
+
+# PC Analysis
 
 rld <- rlog(dds, blind=FALSE)
+# Transformation des donnees de comptes pour la PCA
 #ici on utilise rlog qui permet de prendre considere des differences a priori
 #dans nos comptes selon le tissu
+
 head(assay(rld), 3)
 
-# PCA data and plot
+
+# PCA data and plots
 
 PCA_data1<-plotPCA(rld, intgroup=c("Tissue", "Indiv"), returnData=T)
 PCA_data2<-plotPCA(rld, intgroup=c("Tissue"))
@@ -117,6 +123,7 @@ PCA_data3<-plotPCA(rld, intgroup=c("Indiv"))
 
 percentVar <- round(100 * attr(PCA_data1, "percentVar"))
 #Recupere les pourcentages de variation expliques par PC1 et PC2
+
 
 ggplot(PCA_data1, aes(PC1, PC2, color=Tissue, shape=as.character(Indiv))) +
   geom_point(size=3) +
@@ -129,7 +136,7 @@ ggplot(PCA_data1, aes(PC1, PC2, color=Tissue, shape=as.character(Indiv))) +
 #comme variable continue
 
 
-## MA Plot
+# MA Plot
 
 plotMA(res, ylim=c(-5,5))
 plotMA(resLFC, ylim=c(-5,5))
@@ -138,8 +145,7 @@ plotMA(resLFC, ylim=c(-5,5))
 
 
 
-### Search for Saiyan
-
+### Step 3 : Search for Saiyan
 
 
 geneID_Trinity = read.table("/home/rstudio/disk/data/count_data/Aoce_transdecoder.stegastes.tsv", h=T)
@@ -154,16 +160,14 @@ table_resLFC=data.frame(resLFC)
 
 Goku = merge(Table_resLFC, geneID_Trinity,by.x="id",by.y="id" )
 head(Goku)
-#Creation d'une table conmbinant les correspondances entre gene blaste, transcrit et nos  
+#Creation d'une table conmbinant les correspondances entre identite des genes blastes, transcrits et nos  
 #valeurs pour l'analyse d'expression differentielle pour avoir les niveaux d'expression 
 #pour chaque transcrit identifie.
-
 
 
 Goku[Goku$Steg_ref=="ENSSPAG00000013419|si:ch211-256m1.8", ]
 #On cherche les niveaux d'expression de notre gene d'interet Saiyan grace a son identifiant Ensembl 
 #dans notre table Goku
-
 
 
 ## Count data for Saiyan
