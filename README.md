@@ -21,7 +21,7 @@
 ## Introduction
 
 This project reproduces the analysis of the clownfish transcriptome published by *Salis et al. 2019* and tries to identify *saiyan*, a candidate gene for iridophore expression in white stripes, using RNA Seq data.
-[link to article] (https://onlinelibrary.wiley.com/doi/full/10.1111/pcmr.12766)
+(https://onlinelibrary.wiley.com/doi/full/10.1111/pcmr.12766)
 
 The analysis of the gene expression data uses 6 of the original datasets. Samples are taken from 2 different tissue-types (white or orange) in 3 individuals (3x2).
 We analyse:
