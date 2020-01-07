@@ -2,15 +2,20 @@
 
 ## Table of Contents
 
-* [Introduction]
-* [Set-Up] 
-* [Usage] 
-* [Step 1: Data upload] 
-* [Step 2: Data quality control]
-* [Step 3: Data assembly] 
-* [Step 4: Data annotation] 
-* [Step 5: Transcript expression quantification]
-
+* Introduction
+* Installation
+* Usage 
+  * Step 1: Data upload 
+  * Step 2: Data quality control
+  * Step 3: Data assembly 
+  * Step 4: Data annotation 
+  * Step 5: Transcript expression quantification
+  * Step 6: Differential expression (DE) analysis
+  * Step 6bis: Visualization of our data
+  * Step 7: Searching for Saiyan, our gene of interest
+* License
+* Feedback/Issues
+* Citation
 
 
 ## Introduction
@@ -180,7 +185,7 @@ LFC against counts are plotted using the **plotMA** command. This enables to vis
 Both MA and PC analyses can be plotted using the **ggplot** command. 
 
 
-### Step 7: Searching for Saiyan, our gene of interest
+### Step 7: Searching for Saiyan, the gene of interest
 
 Run **deseq_anal.sh** script.
 
