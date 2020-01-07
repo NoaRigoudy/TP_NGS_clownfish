@@ -90,7 +90,7 @@ This script has 2 parts and uses the **Transdecoder** program.
 
 First, it finds the longest ORFs (Open Reading Frames) in our assembled transcripts, contained in the .fasta file created earlier by Trinity, using the **Transdecoder.LongOrfs** command.
 
-*Note the .cds file in the output which is the nucleotide sequences for coding regions of the final candidate ORFs It is used for annotation in "3."*
+*Note the .cds file in the output which is the nucleotide sequences for coding regions of the final candidate ORFs. It is used for annotation in "3."*
 
 Then, it predicts the likely coding regions using the **Transdecoder.Predict** command.
 
@@ -104,7 +104,7 @@ The script retrieves the *S.partitus* transcriptome dataset from the Biomart Ens
 
 #### 3. Identify ORFs with homologies to known transcripts (S.partitus) 
 
-We want to identify the genes present in our data using Blastn. We choose to work on nucleotide sequences we can distinguish finer differences in expression; proteins being too conserved. 
+We want to identify the genes present in our data using Blastn. We choose to work on nucleotide sequences as it enables to detect finer differences in expression levels (proteins being too conserved). 
 
 Run **blast.sh** script . 
 
@@ -112,7 +112,7 @@ The script identifies homologies between the ORFs found in our assembled transcr
 
 There are 3 steps to this script:
 
-* build a Blastn reference database with the **makeblastdb** command, using the Stegastes partitus genome previously downloaded.
+* build a Blastn reference database with the **makeblastdb** command, using the *Stegastes partitus* genome previously downloaded.
 * blast the .fasta against the Blastn reference database to find homologies using the **blastn** command. 
 * create a .csv annotation table running the **annote_fasta_from_blast.R** script. 
 ### Step 5: Transcript expression quantification
@@ -121,17 +121,17 @@ We choose to use the **Salmon** tool to quantify the expression levels of our tr
 
 Run **salmon.sh** script.
 
-This script also has 2 parts and uses the **Salmon** program.
 
 #### 1. Create an index transcriptome
 
-First, we create an index or target transcriptome that Salmon uses to quasi-map RNA-Seq reads during the quantification. This uses the **salmon index ** command which needs the .fasta file as input and outputs a index folder, used by the 2nd part of Salmon.
+First, we create an index or target transcriptome that Salmon uses to quasi-map RNA-Seq reads during the quantification. This uses the **salmon index** command which needs the .fasta file as input and outputs an index folder, used by the 2nd part of Salmon.
 
 #### 2. Quantify transcript expression in assembled data
 
-Then, we quantify transcript-level abundances using the **salmon quant** command. It needs for input the raw data SRRxxx.fastq files and the transcript index built in "1.". It outputs a count data folder for each SRRxxx.fastq file, each containing a quant.sf file. 
+Then, we quantify transcript-level abundances using the **salmon quant** command.  Input is the raw data *SRRxxx.fastq* files and the transcript index built in "1.". 
+Output is a count data folder containing a *quant.sf* file for each SRRxxx.fastq file. 
 
-These quant.sf files are then used to establish count tables. 
+These *quant.sf files* are then used to establish count tables. 
 
 
 ### Step 6: Differential expression (DE) analysis
@@ -195,7 +195,7 @@ Creation of a master table called *Goku* containing for each gene:
 * the DESeq results 
 * the blastn analysis data (e-value and bitscore).
 
-Saiyan gene expression levels are retrieved using its Ensembl identifier in the Goku table. Previous search for the Ensembl ortholog is performed on the Ensembl online database. 
+Saiyan gene expression levels are retrieved using its Ensembl identifier in the Goku table. Previous search for the Ensembl ortholog is performed through the Biomart Ensembl online database. 
 
 Count values are retrieved and then plotted using the **plotCounts** command. This enables to visualize the expression levels in each tissue and qualitatively assess differences. 
 Significance of these differences are assessed thanks to the DESeq results. 
@@ -203,7 +203,7 @@ Significance of these differences are assessed thanks to the DESeq results.
 This can be done for all top 10 genes referenced in the original paper. 
 *ex: gene fhl2a*
 
-##License
+## License
 
 Bio-RNASeq is free software, licensed under GPLv3.
 
