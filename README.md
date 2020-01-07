@@ -2,20 +2,20 @@
 
 ## Table of Contents
 
-* Introduction
-* Installation
-* Usage 
-  * Step 1: Data upload 
-  * Step 2: Data quality control
-  * Step 3: Data assembly 
-  * Step 4: Data annotation 
-  * Step 5: Transcript expression quantification
-  * Step 6: Differential expression (DE) analysis
-  * Step 6bis: Visualization of our data
-  * Step 7: Searching for Saiyan, our gene of interest
-* License
-* Feedback/Issues
-* Citation
+* [Introduction] 
+* [Installation] 
+* [Usage]  
+  * [Step 1: Data upload]  
+  * [Step 2: Data quality control] 
+  * [Step 3: Data assembly]  
+  * [Step 4: Data annotation]  
+  * [Step 5: Transcript expression quantification]   
+  * [Step 6: Differential expression (DE) analysis] 
+  * [Step 6bis: Visualization of our data] 
+  * [Step 7: Searching for Saiyan, the gene of interest]   
+* [License] 
+* [Feedback/Issues] 
+* [Citation] 
 
 
 ## Introduction
@@ -31,8 +31,6 @@ We analyse:
 
 
 ## Installation
-
-NGS_Practicals_Clownfish has the following dependencies:
 
 Required dependencies:
 
@@ -115,6 +113,8 @@ There are 3 steps to this script:
 * build a Blastn reference database with the **makeblastdb** command, using the *Stegastes partitus* genome previously downloaded.
 * blast the .fasta against the Blastn reference database to find homologies using the **blastn** command. 
 * create a .csv annotation table running the **annote_fasta_from_blast.R** script. 
+
+
 ### Step 5: Transcript expression quantification
 
 We choose to use the **Salmon** tool to quantify the expression levels of our transcripts as it is fast, accurate and bias-aware. 

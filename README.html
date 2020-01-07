@@ -371,26 +371,51 @@ summary {
 <h2>Table of Contents</h2>
 <ul>
 <li><a href="#introduction">Introduction</a></li>
-<li><a href="#set-up">Set-Up</a></li>
-<li><a href="#usage">Usage</a></li>
-<li><a href="#step-1-data-upload">Step 1: Data upload</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a>
+<ul>
+<li><a href="#step-1-data-upload">Step 1: Data upload</a><br />
+</li>
 <li><a href="#step-2-data-quality-control">Step 2: Data quality control</a></li>
-<li><a href="#step-3-data-assembly">Step 3: Data assembly</a></li>
-<li><a href="#step-4-data-annotation">Step 4: Data annotation</a></li>
-<li><a href="#step-5-transcript-expression-quantification">Step 5: Transcript expression quantification</a></li>
+<li><a href="#step-3-data-assembly">Step 3: Data assembly</a><br />
+</li>
+<li><a href="#step-4-data-annotation">Step 4: Data annotation</a><br />
+</li>
+<li><a href="#step-5-transcript-expression-quantification">Step 5: Transcript expression quantification</a><br />
+</li>
+<li><a href="#step-6-differential-expression-de-analysis">Step 6: Differential expression (DE) analysis</a></li>
+<li><a href="#step-6bis-visualization-of-our-data">Step 6bis: Visualization of our data</a></li>
+<li><a href="#step-7-searching-for-saiyan-the-gene-of-interest">Step 7: Searching for Saiyan, the gene of interest</a><br />
+</li>
+</ul></li>
+<li><a href="#license">License</a></li>
+<li><a href="#feedbackissues">Feedback/Issues</a></li>
+<li><a href="#citation">Citation</a></li>
 </ul>
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This project reproduces the analysis of the clownfish transcriptome published by <em>Salis et al. 2019</em> and tries to identify <em>saiyan</em>, a candidate gene for iridophore expression in white stripes, using RNA Seq data. [link to article] (<a href="https://onlinelibrary.wiley.com/doi/full/10.1111/pcmr.12766" class="uri">https://onlinelibrary.wiley.com/doi/full/10.1111/pcmr.12766</a>)</p>
+<p>This project reproduces the analysis of the clownfish transcriptome published by <em>Salis et al. 2019</em> and tries to identify <em>saiyan</em>, a candidate gene for iridophore expression in white stripes, using RNA Seq data. (<a href="https://onlinelibrary.wiley.com/doi/full/10.1111/pcmr.12766" class="uri">https://onlinelibrary.wiley.com/doi/full/10.1111/pcmr.12766</a>)</p>
 <p>The analysis of the gene expression data uses 6 of the original datasets. Samples are taken from 2 different tissue-types (white or orange) in 3 individuals (3x2). We analyse:</p>
 <ul>
 <li>3 “white tissue” samples: SRR7591064, SRR7591067, SRR7591065.</li>
 <li>3 “orange tissue” samples: SRR7591066, SRR7591068, SRR7591069.</li>
 </ul>
 </div>
-<div id="set-up" class="section level2">
-<h2>Set-up</h2>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>Required dependencies:</p>
+<ul>
+<li>FastQC</li>
+<li>BWA-MEM</li>
+<li>SAMtools</li>
+<li>Integrative Genomics Viewer (IGV)</li>
+<li>Genome Analysis ToolKit (GATK)</li>
+<li>Picard Suite</li>
+<li>R</li>
+<li>Bioconductor</li>
+<li>DESeq</li>
+</ul>
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
@@ -421,7 +446,7 @@ summary {
 <p>Run <strong>transdec.sh</strong> script.</p>
 <p>This script has 2 parts and uses the <strong>Transdecoder</strong> program.</p>
 <p>First, it finds the longest ORFs (Open Reading Frames) in our assembled transcripts, contained in the .fasta file created earlier by Trinity, using the <strong>Transdecoder.LongOrfs</strong> command.</p>
-<p><em>Note the .cds file in the output which is the nucleotide sequences for coding regions of the final candidate ORFs It is used for annotation in “3.”</em></p>
+<p><em>Note the .cds file in the output which is the nucleotide sequences for coding regions of the final candidate ORFs. It is used for annotation in “3.”</em></p>
 <p>Then, it predicts the likely coding regions using the <strong>Transdecoder.Predict</strong> command.</p>
 </div>
 <div id="find-and-retrieve-a-reference-genome" class="section level4">
@@ -432,25 +457,91 @@ summary {
 </div>
 <div id="identify-orfs-with-homologies-to-known-transcripts-s.partitus" class="section level4">
 <h4>3. Identify ORFs with homologies to known transcripts (S.partitus)</h4>
+<p>We want to identify the genes present in our data using Blastn. We choose to work on nucleotide sequences as it enables to detect finer differences in expression levels (proteins being too conserved).</p>
 <p>Run <strong>blast.sh</strong> script .</p>
 <p>The script identifies homologies between the ORFs found in our assembled transcripts and the known transcripts of S.partitus. We use <strong>nBlast</strong> on the .cds file produced by <strong>Transdecoder.LongOrfs</strong> in “1.” to blast it against the reference transcriptome downloaded in “2.”.</p>
+<p>There are 3 steps to this script:</p>
+<ul>
+<li>build a Blastn reference database with the <strong>makeblastdb</strong> command, using the <em>Stegastes partitus</em> genome previously downloaded.</li>
+<li>blast the .fasta against the Blastn reference database to find homologies using the <strong>blastn</strong> command.</li>
+<li>create a .csv annotation table running the <strong>annote_fasta_from_blast.R</strong> script.</li>
+</ul>
 </div>
 </div>
 <div id="step-5-transcript-expression-quantification" class="section level3">
 <h3>Step 5: Transcript expression quantification</h3>
 <p>We choose to use the <strong>Salmon</strong> tool to quantify the expression levels of our transcripts as it is fast, accurate and bias-aware.</p>
 <p>Run <strong>salmon.sh</strong> script.</p>
-<p>This script also has 2 parts and uses the <strong>Salmon</strong> program.</p>
 <div id="create-an-index-transcriptome" class="section level4">
 <h4>1. Create an index transcriptome</h4>
-<p>First, we create an index or target transcriptome that Salmon uses to quasi-map RNA-Seq reads during the quantification. This uses the <strong>salmon index </strong> command which needs the .fasta file as input and outputs a index folder, used by the 2nd part of Salmon.</p>
+<p>First, we create an index or target transcriptome that Salmon uses to quasi-map RNA-Seq reads during the quantification. This uses the <strong>salmon index</strong> command which needs the .fasta file as input and outputs an index folder, used by the 2nd part of Salmon.</p>
 </div>
 <div id="quantify-transcript-expression-in-assembled-data" class="section level4">
 <h4>2. Quantify transcript expression in assembled data</h4>
-<p>Then, we quantify transcript-level abundances using the <strong>salmon quant</strong> command. It needs for input the raw data SRRxxx.fastq files and the transcript index built in “1.”. It outputs a count data folder for each SRRxxx.fastq file, each containing a quant.sf file.</p>
-<p>These quant.sf files are then used to establish count tables.</p>
+<p>Then, we quantify transcript-level abundances using the <strong>salmon quant</strong> command. Input is the raw data <em>SRRxxx.fastq</em> files and the transcript index built in “1.”. Output is a count data folder containing a <em>quant.sf</em> file for each SRRxxx.fastq file.</p>
+<p>These <em>quant.sf files</em> are then used to establish count tables.</p>
 </div>
 </div>
+<div id="step-6-differential-expression-de-analysis" class="section level3">
+<h3>Step 6: Differential expression (DE) analysis</h3>
+<p>Run <strong>deseq_anal.sh</strong> script. The <strong>DESeq2</strong> R package is needed.</p>
+<div id="preparation-of-our-data-for-analysis" class="section level4">
+<h4>1. Preparation of our data for analysis</h4>
+<p>For our DE analysis, and to use the DESeq function, three data sets are needed in table format:</p>
+<ul>
+<li>a gene-transcript correspondance table, built using the <em>Trinity.fasta.gene_trans_map</em> output from our Trinity analysis</li>
+<li>the quantification output from Salmon, imported using the <strong>tximport</strong> command</li>
+<li>a metadata table as a “samples.txt” file, containing the following columns: individual_ID, SRR, tissue type (orange,white)</li>
+</ul>
+<p>A count table is built using the <strong>DESeqDataSetFromTximport</strong> command. We here choose to include Individual + Tissue in our design to take into account the effect of each tissue (orange, white) given the individual in our analysis.</p>
+</div>
+<div id="pre-filtering-of-data-and-reference-level-specification" class="section level4">
+<h4>2. Pre-filtering of data and reference level specification</h4>
+<p>We pre-filter our data by eliminating all genes that have less than 10 counts from our Txi table. This saves up on memory use as performing a DE analysis for so little counts is useless.</p>
+<p>The reference level for the Tissue parameter as Orange is set using the <strong>factor</strong> command.</p>
+</div>
+<div id="deseq-analysis-and-log-fold-change-shrinkage" class="section level4">
+<h4>3. DESeq analysis and Log-Fold Change shrinkage</h4>
+<p>DE analysis is performed using the <strong>DESeq</strong> command.</p>
+<p>Results can be retrieved using the <strong>results</strong> command, and visualized using the <strong>summary</strong> command.</p>
+<p>We perform a Log-Fold Change shrinkage on our DESeq data using the <strong>lfcShrink</strong> command. This is essential as it lowers the noise generated by genes with a low count value. Indeed, extreme differences can appear between tissues only as an artefact of low counts and may bias the analysis <em>ex: 10–&gt;20, interpreted as x2 fold change, but in reality only the by-product of stochasticity</em></p>
+</div>
+</div>
+<div id="step-6bis-visualization-of-our-data" class="section level3">
+<h3>Step 6bis: Visualization of our data</h3>
+<p>We want to visualize our data to have a general overview and better apprehend our analyses.</p>
+<p>Run <strong>deseq_anal.sh</strong> script.</p>
+<div id="pca-analysis" class="section level4">
+<h4>1. PCA Analysis</h4>
+<p>A Principal Component Analysis is performed using the <strong>plotPCA</strong> command.</p>
+<p>Data must first be log-transformed using the <strong>rlog</strong> command. We choose to use <strong>rlog</strong> as it allows to consider <em>a priori</em> tissue-specific differences in gene expression levels.</p>
+</div>
+<div id="ma-plot" class="section level4">
+<h4>2. MA Plot</h4>
+<p>LFC against counts are plotted using the <strong>plotMA</strong> command. This enables to visualize genes that are significantly differentially expressed (p&lt;0.05).</p>
+<p>Both MA and PC analyses can be plotted using the <strong>ggplot</strong> command.</p>
+</div>
+</div>
+<div id="step-7-searching-for-saiyan-the-gene-of-interest" class="section level3">
+<h3>Step 7: Searching for Saiyan, the gene of interest</h3>
+<p>Run <strong>deseq_anal.sh</strong> script.</p>
+<p>Creation of a master table called <em>Goku</em> containing for each gene: * the Ensembl gene identifier for Stegastes reference * the Trinity gene identifier * the DESeq results * the blastn analysis data (e-value and bitscore).</p>
+<p>Saiyan gene expression levels are retrieved using its Ensembl identifier in the Goku table. Previous search for the Ensembl ortholog is performed through the Biomart Ensembl online database.</p>
+<p>Count values are retrieved and then plotted using the <strong>plotCounts</strong> command. This enables to visualize the expression levels in each tissue and qualitatively assess differences. Significance of these differences are assessed thanks to the DESeq results.</p>
+<p>This can be done for all top 10 genes referenced in the original paper. <em>ex: gene fhl2a</em></p>
+</div>
+</div>
+<div id="license" class="section level2">
+<h2>License</h2>
+<p>Bio-RNASeq is free software, licensed under GPLv3.</p>
+</div>
+<div id="feedbackissues" class="section level2">
+<h2>Feedback/Issues</h2>
+<p>Please report any issues to the issues page or email <em><a href="mailto:noa.rigoudy@ens-lyon.fr" class="email">noa.rigoudy@ens-lyon.fr</a></em>. If the issue calls for specific expertise, please contact the masterminds behind the project: <em><a href="mailto:corentin.dechaud@ens-lyon.fr" class="email">corentin.dechaud@ens-lyon.fr</a></em> and <em><a href="mailto:marie.semon@ens-lyon.fr" class="email">marie.semon@ens-lyon.fr</a></em>.</p>
+</div>
+<div id="citation" class="section level2">
+<h2>Citation</h2>
+<p><em>P. Salis, T. Lorin, V. Lewis, C. Rey, A. Marcionetti, M.L. Escande, N. Roux, L. Besseau, N. Salamin, M. Semon, et al., Developmental and comparative transcriptomic identification of iridophore contribution to white barring in clownfish,Pigment Cell Melanoma Res, 32 (2019), pp. 391-402</em></p>
 </div>
 </div>
 
