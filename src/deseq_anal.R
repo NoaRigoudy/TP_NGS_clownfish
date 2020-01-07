@@ -94,7 +94,7 @@ resultsNames(dds)
 resLFC <- lfcShrink(dds, coef="Tissue_W_vs_O", type="apeglm")
 summary(resLFC)
 #Summary sur les donnees shrinkees ce qui permet de reduire le bruit genere par 
-#par les genes a faible copies
+#par les genes a faible nombre de copies
 
 sum(resLFC$padj < 0.05, na.rm=TRUE)
 #Somme des genes qui ont une padj<0.05, on en trouve 501
@@ -140,7 +140,7 @@ ggplot(PCA_data1, aes(PC1, PC2, color=Tissue, shape=as.character(Indiv))) +
 
 plotMA(res, ylim=c(-5,5))
 plotMA(resLFC, ylim=c(-5,5))
-#Distribution des variances 
+#Permet de visualiser les genes qui sont differentiellement exprimes.
 
 
 
@@ -150,8 +150,8 @@ plotMA(resLFC, ylim=c(-5,5))
 
 geneID_Trinity = read.table("/home/rstudio/disk/data/count_data/Aoce_transdecoder.stegastes.tsv", h=T)
 geneID_Trinity$id=gsub("_i.*","",geneID_Trinity$Aoce)
-#Recuperation des correspondances entre identite de transcrit et read dans le fichier Trinity
-
+#Creation d'une colonne id contenant des identifiants nettoyes pour chaque gene dans la table de correspondance entre identifiant de gene Trinity, 
+#identifiant Ensembl, et e-value et bitscore du blastn. 
 
 resLFC$id=rownames(resLFC)
 table_resLFC=data.frame(resLFC)
@@ -160,9 +160,9 @@ table_resLFC=data.frame(resLFC)
 
 Goku = merge(Table_resLFC, geneID_Trinity,by.x="id",by.y="id" )
 head(Goku)
-#Creation d'une table conmbinant les correspondances entre identite des genes blastes, transcrits et nos  
-#valeurs pour l'analyse d'expression differentielle pour avoir les niveaux d'expression 
-#pour chaque transcrit identifie.
+#Creation d'une table combinant les correspondances entre identite des genes Trinity, 
+#les resultats du blastn et nos valeurs pour l'analyse d'expression differentielle.
+#Ceci permet d'avoir les niveaux d'expression pour chaque transcrit identifie.
 
 
 Goku[Goku$Steg_ref=="ENSSPAG00000013419|si:ch211-256m1.8", ]

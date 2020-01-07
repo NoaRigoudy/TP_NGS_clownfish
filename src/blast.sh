@@ -43,6 +43,8 @@ blastn -db stegastes -query /home/rstudio/disk/data/trinity_data/Trinity.fasta -
 #evalue: donne evalue minimum a considerer
 #outfmt: format du output
 
-#Rscript --vanilla  annote_fasta_from_blast.R $out_blast 
+#Rscript --vanilla  annote_fasta_from_blast.R $out_blast
+#commande faite et exécutée par Corentin, on n'a pas eu le temps 
+#de faire notre propre blastn en entier.
 
 
